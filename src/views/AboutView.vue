@@ -48,8 +48,6 @@
     <option value="teacher">Teacher</option>
     </select>
     <button @click="signUp()">Sign up</button>
-    <button @click="signIn">Sign in</button>
-    <button @click="signOut">Sign out</button>
   </div>
 </template>
 <script>
@@ -75,6 +73,14 @@ export default {
       if (user) {
         console.log(user);
         this.$router.push({name: "home"});
+      } else {
+        console.log(error);
+      };
+      const { data } = await this.$supabase
+        .from("utilisateur")
+        .insert([this.user]);
+      if (data) {
+        console.log(data);
       } else {
         console.log(error);
       }

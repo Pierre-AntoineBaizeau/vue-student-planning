@@ -15,6 +15,13 @@ export default new Vuex.Store({
       firstname: "",
       lastname: ""
     },
+    utilisateur: {
+      email: "",
+      password: "",
+      role: "",
+      firstname: "",
+      lastname: ""
+    },
     course: {
       name: "",
       teacher: "",
@@ -25,6 +32,7 @@ export default new Vuex.Store({
     },
   },
   getters: {
+    
   },
   mutations: {
     setUser(state, payload) {

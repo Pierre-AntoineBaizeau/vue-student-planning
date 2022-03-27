@@ -1,13 +1,18 @@
 <template>
     <nav>
+        <div  v-if="user_data">
       <router-link to="/">Home</router-link> |
-      <button v-if="user_data" type="button" @click="signOut">
+      <button type="button" @click="signOut">
         sign Out
       </button> 
-      <router-link v-else to="/about">About</router-link> 
+      </div>
+      <div v-else>
+      <router-link  to="/sing-up">Sign up</router-link> |
+      <router-link  to="/sign-in">Sign in</router-link> 
+      </div>
         <div v-if="user_data" class="flex">
-            <p v-if="user_data.user_metadata.firstname">Hello {{ user_data.user_metadata.firstname }} </p>
-            <p v-if="user_data.user_metadata.lastname != null"> {{ user_data.user_metadata.lastname }} </p>
+            <p v-if="user_data.user_metadata.firstname"><b>Hello</b>&nbsp;<u>{{ user_data.user_metadata.firstname }} </u></p>
+            <p v-if="user_data.user_metadata.lastname != null"><u>&nbsp; {{ user_data.user_metadata.lastname }}</u> </p>
         </div>
     </nav>
 </template>

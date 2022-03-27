@@ -1,6 +1,5 @@
 <template>
   <div class="space-y-8 divide-y divide-gray-200">
-    <pre>{{ user_data }}</pre>
     <div class="space-y-8 divide-y divide-gray-200 sm:space-y-5">
       <div class="pt-8 space-y-6 sm:pt-10 sm:space-y-5">
         <div>
@@ -33,27 +32,33 @@
             </div>
           </div>
 
+
           <div
             class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
           >
             <label
-              for="teacher"
+              for="description"
               class="block text-sm font-medium text-gray-700 sm:mt-px sm:pt-2"
             >
-              Teacher
+              teacher
             </label>
             <div class="mt-1 sm:mt-0 sm:col-span-2">
-              <input
-                type="text"
-                name="teacher"
-                id="teacher"
-                v-model="course.teacher"
-                autocomplete="teacher"
-                placeholder="Marine dupont"
-                class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
-              />
+              <select
+              name="role"
+              id="role"
+              v-model="course.teacher"
+              class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+             >
+            <option value="" disabled> Choose teacher</option>
+            <option  :data="teacher"
+              :key="'teacher-' + teacher.id"
+              v-for="teacher in utilisateur" :value="teacher.lastname">{{ teacher.lastname }}</option>
+            </select>
             </div>
           </div>
+
+
+         
 
           <div
             class="sm:grid sm:grid-cols-3 sm:gap-4 sm:items-start sm:border-t sm:border-gray-200 sm:pt-5"
@@ -88,13 +93,16 @@
             </label>
             <div class="mt-1 sm:mt-0 sm:col-span-2">
               <select
-                id="studient"
-                name="studient"
-                v-model="course.studient"
-                class="block max-w-lg w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border-gray-300 rounded-md"
-              >
-              <option value=""></option>
-              </select>
+              name="role"
+              id="role"
+              v-model="course.studient"
+              class="max-w-lg block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:max-w-xs sm:text-sm border-gray-300 rounded-md"
+             >
+            <option value="" disabled> Choose studient</option>
+            <option  :data="studient"
+              :key="'studient-' + studient.id"
+              v-for="studient in utilisateur" :value="studient.lastname">{{ studient.lastname }}</option>
+            </select>
             </div>
           </div>
 
@@ -162,15 +170,23 @@
 <script>
 import { mapState } from "vuex";
 export default {
-  
+  data() {
+    return {
+      utilisateur: [],
+    };
+  },
   computed: {
     ...mapState(["course"]),
     ...mapState(["user_data"]),
   },
+ 
   mounted() {
     if (this.$route.name == "updateCourse") {
       this.getCourse();
-    }
+    };
+        this.getAllTeachers();
+
+    this.getAllStudients();
   },
   methods: {
     goTo(name) {
@@ -209,6 +225,23 @@ export default {
         console.log(error);
       }
     },
+    async getAllTeachers() {
+      const { data, error } = await this.$supabase.from("utilisateur").select().eq('role', 'teacher');
+      if (data) {
+        this.utilisateur = data;
+      } else {
+        console.log(error);
+      }
+    },
+    async getAllStudients() {
+      const { data, error } = await this.$supabase.from("utilisateur").select().eq('role', 'studient');
+      if (data) {
+        this.utilisateur = data;
+      } else {
+        console.log(error);
+      }
+    },
+    
   },
 };
 </script>

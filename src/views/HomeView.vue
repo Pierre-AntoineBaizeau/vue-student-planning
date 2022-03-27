@@ -1,6 +1,7 @@
 <template>
   <div class="home">
     <div v-if="user_data">
+      
       <button
         v-if="user_data.user_metadata.role == 'teacher' "
         type="button"
@@ -13,6 +14,7 @@
         :data="course"
         :key="'course-' + course.id"
         v-for="course in courses"
+        
       />
     </div>
   </div>
@@ -31,6 +33,7 @@ export default {
       courses: [],
     };
   },
+  
   computed: {
     ...mapState(["user_data"]),
   },
@@ -42,7 +45,8 @@ export default {
       this.$router.push({ name: name });
     },
     async getAllCourses() {
-      const { data, error } = await this.$supabase.from("courses").select();
+      const user = this.$supabase.auth.user()
+      const { data, error } = await this.$supabase.from("courses").select().eq('studient', user.user_metadata.lastname);
       if (data) {
         this.courses = data;
       } else {

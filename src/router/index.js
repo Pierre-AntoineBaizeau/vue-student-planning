@@ -30,17 +30,25 @@ const routes = [
     name: 'updateCourse',
     component: NewCourseView,
     meta: {
-      requireAuth: false
+      requireAuth: true,
     }
   },
   {
-    path: '/about',
+    path: '/sing-up',
     name: 'about',
     component: () => import('../views/AboutView.vue'),
     meta: {
       requireAuth: false
     }
-  }
+  },
+  {
+    path: '/sign-in',
+    name: 'singIn',
+    component: () => import('../views/SingInView.vue'),
+    meta: {
+      requireAuth: false
+    }
+  },
 ]
 
 const router = new VueRouter({

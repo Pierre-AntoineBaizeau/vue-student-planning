@@ -1,5 +1,5 @@
-<template>
-  <div class="bg-black px-4 m-5 py-5 sm:px-6" @click="goTo('updateCourse')">
+<template >
+  <div class="bg-black px-4 m-5 py-5 sm:px-6">
     <div class="flex space-x-3">
       <div class="min-w-0 flex-1">
         <p class="text-sm font-medium text-white text-left">
@@ -15,6 +15,7 @@
         <div class="relative z-30 inline-block text-left">
           <div>
             <button
+             v-if="user_data.user_metadata.role == 'teacher' "
               type="button"
               class="-m-2 p-2 rounded-full flex items-center text-gray-400 hover:text-gray-600"
               id="menu-0-button"
@@ -36,6 +37,19 @@
                 />
               </svg>
             </button>
+            <button
+             v-if="user_data.user_metadata.role == 'teacher' "
+              type="button"
+              class="-m-2 p-2 rounded-full flex items-center text-gray-400 hover:text-gray-600"
+              id="menu-0-button"
+              aria-expanded="false"
+              aria-haspopup="true"
+              @click="goTo('updateCourse')"
+            >
+              <p>update</p>
+              <!-- Heroicon name: solid/dots-vertical -->
+              
+            </button>
           </div>
         </div>
       </div>
@@ -43,9 +57,14 @@
   </div>
 </template>
 <script>
+import { mapState } from "vuex";
+
 export default {
   props: {
     data: Object,
+  },
+   computed: {
+    ...mapState(["user_data"]),
   },
   methods: {
     goTo(name) {
