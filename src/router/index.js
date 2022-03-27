@@ -1,6 +1,10 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import NewCourseView from '../views/NewCourseView.vue'
+
+import {supabase} from '../supabase'
+import store from "../store"
 
 Vue.use(VueRouter)
 
@@ -8,15 +12,34 @@ const routes = [
   {
     path: '/',
     name: 'home',
-    component: HomeView
+    component: HomeView,
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/new-course',
+    name: 'newCourse',
+    component: NewCourseView,
+    meta: {
+      requireAuth: true
+    }
+  },
+  {
+    path: '/new-course/:id',
+    name: 'updateCourse',
+    component: NewCourseView,
+    meta: {
+      requireAuth: false
+    }
   },
   {
     path: '/about',
     name: 'about',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/AboutView.vue')
+    component: () => import('../views/AboutView.vue'),
+    meta: {
+      requireAuth: false
+    }
   }
 ]
 
@@ -24,6 +47,19 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach(async (to, from, next) => {
+  let user = await supabase.auth.user();
+  store.dispatch("setUser", user)
+  if(user){
+    next();
+  }else if(to.meta.requireAuth && !user){
+    next({name: "about"});
+  }
+  else{
+    next();
+  }
 })
 
 export default router
